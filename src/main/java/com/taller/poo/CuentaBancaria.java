@@ -7,6 +7,17 @@ public class CuentaBancaria {
     private Double limiteCredito;
 
     public CuentaBancaria() {
+        this.numeroCuenta = "000000";
+        this.titular = "Sin Nombre";
+        this.saldo = 0.0;
+        this.limiteCredito = 0.0;
+    }
+
+    public CuentaBancaria(String numeroCuenta, String titular) {
+        this.numeroCuenta = numeroCuenta;
+        this.titular = titular;
+        this.saldo = 0.0;
+        this.limiteCredito = 100.0;
     }
 
     public CuentaBancaria(String numeroCuenta, String titular, double saldo, Double limiteCredito) {
@@ -48,6 +59,28 @@ public class CuentaBancaria {
         this.limiteCredito = limiteCredito;
     }
 
+    public boolean depositar(double monto) {
+        if (monto > 0) {
+            this.saldo += monto;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean retirar(double monto) {
+        double disponible = this.saldo;
+        if (this.limiteCredito != null) {
+            disponible += this.limiteCredito;
+        }
+        if (monto > 0 && monto <= disponible) {
+            this.saldo -= monto;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public String toString() {
         return "CuentaBancaria{" +
@@ -58,29 +91,21 @@ public class CuentaBancaria {
                 '}';
     }
 
-    public boolean depositar(double monto){
-        if(monto > 0){
-            this.saldo += monto;
-            return true;
-        }else{
-            return false;
-        }
-    }
-    public boolean retirar(double monto){
-        if (monto > 0 && monto <= this.saldo+this.limiteCredito){
-            this.saldo -= monto;
-            return true;
-        }else{
-            return false;
-        }
-    }
-/*
-        * PREGUNTAS DE ANÁLISIS:
-        * 1. ¿Qué diferencia ocurre a nivel de memoria y asignación por defecto al
-        declarar 'saldo' como double primitivo frente a 'limiteCredito' como Wrapper
-        Double?
-        * 2. ¿Por qué una operación aritmética sobre un atributo no inicializado de
-        tipo Double provoca una NullPointerException, mientras que sobre un double
-        primitivo opera con 0.0?
-    */
+    /*
+     * PREGUNTAS DE ANÁLISIS:
+     * 1. ¿Qué diferencia ocurre a nivel de memoria y asignación por defecto al
+     * declarar 'saldo' como double primitivo frente a 'limiteCredito' como Wrapper
+     * Double?
+     * R: 'saldo' es un primitivo: guarda el número directamente (8 bytes) y, si no se
+     * inicializa, vale 0.0 por defecto. 'limiteCredito' es un objeto Double: en la
+     * variable solo se guarda una referencia a un objeto en el heap (usa más memoria) y,
+     * si no se inicializa, vale null porque aún no apunta a ningún objeto.
+     * 2. ¿Por qué una operación aritmética sobre un atributo no inicializado de
+     * tipo Double provoca una NullPointerException, mientras que sobre un double
+     * primitivo opera con 0.0?
+     * R: Para operar con un Double Java hace unboxing, es decir, llama internamente a
+     * doubleValue() sobre el objeto. Si el atributo es null no hay objeto sobre el cual
+     * llamar ese método y se lanza NullPointerException. El double primitivo nunca es
+     * null: ya tiene el valor 0.0, por eso la operación se realiza sin problema.
+     */
 }
