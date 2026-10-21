@@ -1,110 +1,87 @@
 package co.edu.puj.rpg.modelo;
 
-import co.edu.puj.rpg.modelo.enemigo.Enemigo;
+public abstract class Personaje implements ICombatiente {
+    protected String nombre;
+    protected int vida;
+    protected int vidaMaxima;
+    protected int ataqueBase;
+    protected int posicionX;
+    protected int posicionY;
 
-public class Personaje {
-    private String nombre;
-    private int puntosVida;
-    private int vidaMaxima;
-    private int puntosAtaque;
-    private int nivel;
-    private double oro;
-    private boolean estaVivo;
-
-    public Personaje(String nombre,int vidaMaxima,int puntosAtaque,double oro){
+    public Personaje(String nombre, int vida, int ataqueBase, int posicionX, int posicionY) {
         this.nombre = nombre;
-        this.vidaMaxima = vidaMaxima;
-        this.puntosVida = vidaMaxima;
-        this.puntosAtaque = puntosAtaque;
-        this.nivel = 1;
-        this.oro = oro;
-        this.estaVivo = true;
+        this.vida = vida;
+        this.vidaMaxima = vida;
+        this.ataqueBase = ataqueBase;
+        this.posicionX = posicionX;
+        this.posicionY = posicionY;
     }
 
-    public void atacar(Enemigo enemigo){
-        enemigo.recibirDano(this.puntosAtaque);
-    }
+    public abstract void realizarAtaqueEspecial(Personaje objetivo);
 
-    public void usarPocion(int cantidadRestaurada){
-        if (cantidadRestaurada > 0){
-            setPuntosVida(this.puntosVida + cantidadRestaurada);
+    public abstract char getSimbolo();
+
+    @Override
+    public void defender(int danoRecibido) {
+        recibirDano(danoRecibido);
+        System.out.printf("%s recibe %d de daño. Vida: %d/%d%n", nombre, danoRecibido, vida, vidaMaxima);
+        if (!estaVivo()) {
+            System.out.printf("%s ha caído en batalla.%n", nombre);
         }
     }
 
-    public void recibirDano(int cantidadDano){
-        if (cantidadDano > 0){
-            setPuntosVida(this.puntosVida - cantidadDano);
+    public boolean estaVivo() {
+        return vida > 0;
+    }
+
+    public void recibirDano(int cantidad) {
+        if (cantidad > 0) {
+            vida = vida - cantidad;
         }
+        if (vida < 0) {
+            vida = 0;
+        }
+    }
+
+    public void curar(int cantidad) {
+        if (cantidad > 0) {
+            vida = vida + cantidad;
+        }
+        if (vida > vidaMaxima) {
+            vida = vidaMaxima;
+        }
+    }
+
+    public String getEstado() {
+        return String.format("%s | Vida: %d/%d", nombre, vida, vidaMaxima);
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public int getPuntosVida() {
-        return puntosVida;
+    public int getVida() {
+        return vida;
     }
 
     public int getVidaMaxima() {
         return vidaMaxima;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public int getAtaqueBase() {
+        return ataqueBase;
     }
 
-    public void setVidaMaxima(int vidaMaxima) {
-        this.vidaMaxima = vidaMaxima;
+    public int getPosicionX() {
+        return posicionX;
     }
 
-    public void setPuntosAtaque(int puntosAtaque) {
-        this.puntosAtaque = puntosAtaque;
+    public int getPosicionY() {
+        return posicionY;
     }
 
-    public void setEstaVivo(boolean estaVivo) {
-        this.estaVivo = estaVivo;
-    }
-
-    public int getPuntosAtaque() {
-        return puntosAtaque;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public double getOro() {
-        return oro;
-    }
-
-    public boolean isEstaVivo() {
-        return estaVivo;
-    }
-
-    public void setPuntosVida(int vida){
-        if (vida <= 0){
-            this.puntosVida = 0;
-            this.estaVivo = false;
-        } else if (vida > this.vidaMaxima) {
-            this.puntosVida = this.vidaMaxima;
-            this.estaVivo = true;
-        }else{
-            this.puntosVida = vida;
-            this.estaVivo = true;
-        }
-    }
-
-    public void setOro(double oro){
-        if (oro < 0.0){
-            System.out.println("Saldo insuficiente");
-        }else{
-            this.oro = oro;
-        }
-    }
-
-    public void setNivel(int nivel){
-        if(nivel >= 1 ){
-            this.nivel = nivel;
-        }
+    public void setPosicion(int posicionX, int posicionY) {
+        this.posicionX = posicionX;
+        this.posicionY = posicionY;
     }
 }
