@@ -1,6 +1,7 @@
 package co.edu.puj.rpg.principal;
 
 import co.edu.puj.rpg.modelo.*;
+import co.edu.puj.rpg.modelo.enemigo.Enemigo;
 
 import java.util.ArrayList;
 import java.util.List;

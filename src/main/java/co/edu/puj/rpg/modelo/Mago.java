@@ -4,7 +4,7 @@ public class Mago extends Personaje {
     protected int puntosMana;
 
     public Mago(String nombre, int vida, int ataqueBase, int posicionX, int posicionY, int puntosMana) {
-        super(nombre, vida, ataqueBase, posicionX, posicionY);
+        super(nombre, vida, ataqueBase, posicionX, posicionY, puntosMana);
         this.puntosMana = puntosMana;
     }
 
@@ -16,11 +16,11 @@ public class Mago extends Personaje {
         if (modoFuria) {
             puntosMana = puntosMana - 10;
             System.out.printf("%s lanza una Bola de Fuego sobre %s%n", nombre, objetivo.getNombre());
-            objetivo.defender(ataqueBase + 15);
+            objetivo.defender(calcularAtaqueTotal() + 15);
         } else {
             puntosMana = puntosMana + 5;
             System.out.printf("%s golpea con su bastón a %s y recupera 5 de maná%n", nombre, objetivo.getNombre());
-            objetivo.defender(ataqueBase / 2);
+            objetivo.defender(calcularAtaqueTotal() / 2);
         }
     }
 

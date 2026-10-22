@@ -13,7 +13,7 @@ public class Guerrero extends Personaje {
     }
 
     public void atacar(Personaje objetivo, boolean modoFuria) {
-        int dano = ataqueBase + fuerzaEscudo;
+        int dano = calcularAtaqueTotal() + fuerzaEscudo;
         if (modoFuria) {
             dano = dano * 2;
             System.out.printf("%s entra en modo furia y golpea a %s%n", nombre, objetivo.getNombre());
